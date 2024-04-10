@@ -7,23 +7,21 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Store struct {
-	db *sql.DB
-}
+var database *sql.DB
 
 // Open an SQLite3 database at the specified path.
-func (s *Store) Open(path string) (err error) {
+func Open(path string) (err error) {
 
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {
 		return err
 	}
 
-	s.db = db
+	database = db
 
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
-			if err := s.createDatabase(); err != nil {
+			if err := createDatabase(); err != nil {
 				return err
 			}
 		}
@@ -34,11 +32,11 @@ func (s *Store) Open(path string) (err error) {
 }
 
 // Close SQLite3 database used by Store.
-func (s *Store) Close() error {
-	return s.db.Close()
+func Close() error {
+	return database.Close()
 }
 
-func (s *Store) createDatabase() error {
+func createDatabase() error {
 
 	tables := `
     CREATE TABLE athletes (
@@ -56,7 +54,7 @@ func (s *Store) createDatabase() error {
     );
     `
 
-	_, err := s.db.Exec(tables)
+	_, err := database.Exec(tables)
 
 	if err != nil {
 		return err

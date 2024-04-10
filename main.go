@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-	var store database.Store
-	store.Open("test.sqlite")
+
+	database.Open("test.sqlite")
+	defer database.Close()
 
 	api.Serve()
 }
