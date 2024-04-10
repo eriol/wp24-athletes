@@ -3,6 +3,7 @@ package database // import "github.com/eriol/wp24-athletes/database"
 type Athlete struct {
 	Slug      string `json:"slug"`
 	Name      string `json:"name"`
+	Gender    string `json:"gender"`
 	Age       uint8  `json:"age"`
 	Sport     string `json:"sport"`
 	FamousFor string `json:"famous_for"`
@@ -15,6 +16,7 @@ func GetAthletes() ([]Athlete, error) {
         athletes.slug,
         athletes.name,
         athletes.gender,
+        athletes.age,
         sports.name,
         athletes.famous_for
     FROM
@@ -33,7 +35,14 @@ func GetAthletes() ([]Athlete, error) {
 	for rows.Next() {
 		athlete := Athlete{}
 
-		err = rows.Scan(&athlete.Slug, &athlete.Name, &athlete.Age, &athlete.Sport, &athlete.FamousFor)
+		err = rows.Scan(
+			&athlete.Slug,
+			&athlete.Name,
+			&athlete.Gender,
+			&athlete.Age,
+			&athlete.Sport,
+			&athlete.FamousFor,
+		)
 		if err != nil {
 			return nil, err
 		}
