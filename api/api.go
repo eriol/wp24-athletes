@@ -6,6 +6,7 @@ import (
 )
 
 func Serve() {
+	http.HandleFunc("/athletes", getAthletes)
 	http.HandleFunc("/", info)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

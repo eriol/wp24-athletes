@@ -2,7 +2,10 @@ package api // import "github.com/eriol/wp24-athletes/api"
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+
+	"github.com/eriol/wp24-athletes/database"
 )
 
 type ApiInfo struct {
@@ -21,6 +24,23 @@ func info(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	if err := json.NewEncoder(w).Encode(api); err != nil {
+		panic(err)
+	}
+}
+
+func getAthletes(w http.ResponseWriter, r *http.Request) {
+	athletes, err := database.GetAthletes()
+
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(athletes); err != nil {
 		panic(err)
 	}
 }
