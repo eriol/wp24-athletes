@@ -13,8 +13,15 @@ type ApiInfo struct {
 	Version     string `json:"version"`
 }
 
-// Return API description
+// Return API description.
+// This endpoint is the root of the API.
 func info(w http.ResponseWriter, r *http.Request) {
+	// The "/" pattern matches everything, so check if we are at the
+	// root and return a 404 otherwise.
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	api := ApiInfo{
 		Description: "A simple open REST API for athletes!",
 		Version:     "0.1",
