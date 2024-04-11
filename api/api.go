@@ -6,7 +6,10 @@ import (
 )
 
 func Serve() {
-	http.HandleFunc("/athletes", getAthletes)
-	http.HandleFunc("/", info)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router := http.NewServeMux()
+
+	router.HandleFunc("GET /{$}", info)
+	router.HandleFunc("GET /athletes", getAthletes)
+
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
