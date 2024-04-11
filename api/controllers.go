@@ -21,11 +21,23 @@ type ApiError struct {
 // Return API description.
 // This endpoint is the root of the API.
 func info(w http.ResponseWriter, r *http.Request) {
+	// The "/" pattern matches everything, so check if we are at the
+	// root and return a 403 otherwise (we blame the client for endpoints that
+	// don't exist!).
+	//
+	// It's not possible to specify a custom NotFound(), because in
+	// https://golang.org/src/pkg/net/http/server.go NotFoundHandler()
+	// returns a hardcoded function called NotFound(). So we need to do this to
+	// use JSON instead.
+	if r.URL.Path != "/" {
+		toJSON(w, http.StatusForbidden, ApiError{Error: "Forbidden"})
+		return
+	}
+
 	api := ApiInfo{
 		Description: "A simple open REST API for athletes!",
 		Version:     "0.1",
 	}
-
 	toJSON(w, http.StatusOK, api)
 }
 

@@ -9,7 +9,7 @@ import (
 func Serve() {
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /{$}", info)
+	router.HandleFunc("GET /", info)
 	router.HandleFunc("GET /athletes", getAthletes)
 	router.HandleFunc("GET /athletes/{slug}", getAthlete)
 
