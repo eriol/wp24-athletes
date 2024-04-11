@@ -14,6 +14,10 @@ type ApiInfo struct {
 	Version     string `json:"version"`
 }
 
+type ApiError struct {
+	Error string `json:"error"`
+}
+
 // Return API description.
 // This endpoint is the root of the API.
 func info(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +53,7 @@ func getAthlete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		if err == sql.ErrNoRows {
-			http.NotFound(w, r)
+			toJSON(w, http.StatusNotFound, ApiError{Error: "No athlete found"})
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
