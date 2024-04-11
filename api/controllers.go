@@ -2,7 +2,6 @@ package api // import "github.com/eriol/wp24-athletes/api"
 
 import (
 	"database/sql"
-	"encoding/json"
 	"log"
 	"net/http"
 	"strings"
@@ -23,12 +22,7 @@ func info(w http.ResponseWriter, r *http.Request) {
 		Version:     "0.1",
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(api); err != nil {
-		panic(err)
-	}
+	toJSON(w, http.StatusOK, api)
 }
 
 func getAthletes(w http.ResponseWriter, r *http.Request) {
@@ -40,12 +34,7 @@ func getAthletes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(athletes); err != nil {
-		panic(err)
-	}
+	toJSON(w, http.StatusOK, athletes)
 }
 
 func getAthlete(w http.ResponseWriter, r *http.Request) {
@@ -67,11 +56,5 @@ func getAthlete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(athlete); err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-	}
+	toJSON(w, http.StatusOK, athlete)
 }
