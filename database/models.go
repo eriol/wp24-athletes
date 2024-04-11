@@ -52,3 +52,38 @@ func GetAthletes() ([]Athlete, error) {
 
 	return athletes, nil
 }
+
+func GetAthlete(slug string) (Athlete, error) {
+
+	query := `
+    SELECT
+        athletes.slug,
+        athletes.name,
+        athletes.gender,
+        athletes.age,
+        sports.name,
+        athletes.famous_for
+    FROM
+        athletes
+    INNER JOIN
+        sports
+    ON
+        athletes.sport_id = sports.id
+    WHERE
+        athletes.slug = ?;`
+
+	athlete := Athlete{}
+
+	if err := database.QueryRow(query, slug).Scan(
+		&athlete.Slug,
+		&athlete.Name,
+		&athlete.Gender,
+		&athlete.Age,
+		&athlete.Sport,
+		&athlete.FamousFor,
+	); err != nil {
+		return athlete, err
+	}
+
+	return athlete, nil
+}

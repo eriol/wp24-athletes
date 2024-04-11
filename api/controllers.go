@@ -1,9 +1,11 @@
 package api // import "github.com/eriol/wp24-athletes/api"
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/eriol/wp24-athletes/database"
 )
@@ -43,5 +45,33 @@ func getAthletes(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewEncoder(w).Encode(athletes); err != nil {
 		panic(err)
+	}
+}
+
+func getAthlete(w http.ResponseWriter, r *http.Request) {
+	slug := strings.TrimSpace(r.PathValue("slug"))
+	if slug == "" {
+		http.NotFound(w, r)
+		return
+	}
+
+	athlete, err := database.GetAthlete(slug)
+
+	if err != nil {
+		log.Println(err)
+		if err == sql.ErrNoRows {
+			http.NotFound(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(athlete); err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }

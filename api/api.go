@@ -10,6 +10,7 @@ func Serve() {
 
 	router.HandleFunc("GET /{$}", info)
 	router.HandleFunc("GET /athletes", getAthletes)
+	router.HandleFunc("GET /athletes/{slug}", getAthlete)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
