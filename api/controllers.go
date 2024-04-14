@@ -2,11 +2,17 @@ package api // import "github.com/eriol/wp24-athletes/api"
 
 import (
 	"database/sql"
+	"fmt"
+	"image"
+	"image/jpeg"
 	"log"
 	"net/http"
+	"os"
+	"path"
 	"strings"
 
 	"github.com/eriol/wp24-athletes/database"
+	"golang.org/x/image/draw"
 )
 
 type ApiInfo struct {
@@ -107,4 +113,49 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	toJSON(w, http.StatusOK, athletes)
+}
+
+func images(w http.ResponseWriter, r *http.Request) {
+	slug := strings.TrimSpace(r.PathValue("slug"))
+	if slug == "" {
+		toJSON(w, http.StatusBadRequest, ApiError{Error: "No athlete slug provided"})
+		return
+	}
+
+	p := path.Join("./images", fmt.Sprintf("%s%s", slug, ".jpg"))
+	f, err := os.Open(p)
+	defer f.Close()
+	if err != nil {
+		toJSON(w, http.StatusNotFound, ApiError{Error: "No image found"})
+		return
+	}
+
+	i, _, err := image.Decode(f)
+	if err != nil {
+		toJSON(w, http.StatusInternalServerError, ApiError{Error: "Can't decode the image"})
+		return
+	}
+
+	var outputImage image.Image
+	queryParams := r.URL.Query()
+	size := queryParams.Get("size")
+
+	scaleBy := 1
+	if size == "M" {
+		scaleBy = 2
+	}
+	if size == "S" {
+		scaleBy = 4
+	}
+
+	if size == "M" || size == "S" {
+		resized := image.NewRGBA(image.Rect(0, 0, i.Bounds().Max.X/scaleBy, i.Bounds().Max.Y/scaleBy))
+		draw.NearestNeighbor.Scale(resized, resized.Rect, i, i.Bounds(), draw.Over, nil)
+		outputImage = resized
+	} else {
+		outputImage = i
+	}
+
+	w.Header().Set("Content-Type", "image/jpeg")
+	jpeg.Encode(w, outputImage, &jpeg.Options{Quality: jpeg.DefaultQuality})
 }

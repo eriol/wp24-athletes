@@ -13,6 +13,7 @@ func Serve() {
 	router.HandleFunc("GET /athletes", getAthletes)
 	router.HandleFunc("GET /athletes/{slug}", getAthlete)
 	router.HandleFunc("GET /search", search)
+	router.HandleFunc("GET /images/{slug}", images)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
