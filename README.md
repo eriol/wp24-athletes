@@ -112,6 +112,6 @@ Return a picture of the athlete.
 > [!NOTE]
 > All the pictures where generated locally using Stable Diffusion XL.
 
-For example, `curl -s http://localhost:8080/images/eurydice-di-corinto\?size\=M | feh -` will show:
+For example, `curl -s http://<URL of the athletes API>/images/eurydice-di-corinto\?size\=M | feh -` will show:
 
 <img src="images/eurydice-di-corinto.jpg" width="448"/>
