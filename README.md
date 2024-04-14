@@ -107,7 +107,7 @@ For example, `curl -s http://<URL of the athletes API>/search\?sport\=salto | jq
 
 ### /images/{slug}
 
-Return a picture of the athlete.
+Return a picture of the athlete. You can specify `size=M` or `size=S` as query params to alter picture size.
 
 > [!NOTE]
 > All the pictures where generated locally using Stable Diffusion XL.
