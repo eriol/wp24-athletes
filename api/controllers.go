@@ -150,7 +150,7 @@ func images(w http.ResponseWriter, r *http.Request) {
 
 	if size == "M" || size == "S" {
 		resized := image.NewRGBA(image.Rect(0, 0, i.Bounds().Max.X/scaleBy, i.Bounds().Max.Y/scaleBy))
-		draw.NearestNeighbor.Scale(resized, resized.Rect, i, i.Bounds(), draw.Over, nil)
+		draw.BiLinear.Scale(resized, resized.Rect, i, i.Bounds(), draw.Over, nil)
 		outputImage = resized
 	} else {
 		outputImage = i
