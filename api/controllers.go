@@ -95,6 +95,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 		q = strings.TrimSpace(famousFor)
 	} else {
 		toJSON(w, http.StatusBadRequest, ApiError{Error: "You have to search by name, sport or famous_for."})
+		return
 	}
 
 	athletes, err := database.Search(searchType, q)
