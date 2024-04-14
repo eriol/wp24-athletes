@@ -56,7 +56,7 @@ func getAthletes(w http.ResponseWriter, r *http.Request) {
 func getAthlete(w http.ResponseWriter, r *http.Request) {
 	slug := strings.TrimSpace(r.PathValue("slug"))
 	if slug == "" {
-		http.NotFound(w, r)
+		toJSON(w, http.StatusBadRequest, ApiError{Error: "No athlete slug provided"})
 		return
 	}
 
