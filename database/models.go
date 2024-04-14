@@ -32,7 +32,9 @@ func GetAthletes() ([]Athlete, error) {
     INNER JOIN
         sports
     ON
-        athletes.sport_id = sports.id;`
+        athletes.sport_id = sports.id
+    ORDER BY
+        athletes.name;`
 
 	rows, err := database.Query(query)
 	if err != nil {
@@ -115,7 +117,9 @@ func Search(t SearchType, q string) ([]Athlete, error) {
     ON
         athletes.sport_id = sports.id
     WHERE
-        athletes.name LIKE '%'||?||'%';`
+        athletes.name LIKE '%'||?||'%'
+    ORDER BY
+        athletes.name;`
 	} else if t == SearchBySport {
 		query = `
     SELECT
