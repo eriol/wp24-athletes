@@ -74,3 +74,36 @@ func getAthlete(w http.ResponseWriter, r *http.Request) {
 
 	toJSON(w, http.StatusOK, athlete)
 }
+
+func search(w http.ResponseWriter, r *http.Request) {
+	queryParams := r.URL.Query()
+
+	var searchType database.SearchType
+	var q string
+	name := queryParams.Get("name")
+	sport := queryParams.Get("sport")
+	famousFor := queryParams.Get("famous_for")
+
+	if name != "" {
+		searchType = database.SearchByName
+		q = strings.TrimSpace(name)
+	} else if sport != "" {
+		searchType = database.SearchBySport
+		q = strings.TrimSpace(sport)
+	} else if famousFor != "" {
+		searchType = database.SearchByFamousFor
+		q = strings.TrimSpace(famousFor)
+	} else {
+		toJSON(w, http.StatusBadRequest, ApiError{Error: "You have to search by name, sport or famous_for."})
+	}
+
+	athletes, err := database.Search(searchType, q)
+
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	toJSON(w, http.StatusOK, athletes)
+}

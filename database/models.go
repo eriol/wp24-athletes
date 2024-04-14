@@ -9,6 +9,14 @@ type Athlete struct {
 	FamousFor string `json:"famous_for"`
 }
 
+type SearchType int
+
+const (
+	SearchByName SearchType = iota
+	SearchBySport
+	SearchByFamousFor
+)
+
 func GetAthletes() ([]Athlete, error) {
 
 	query := `
@@ -86,4 +94,87 @@ func GetAthlete(slug string) (Athlete, error) {
 	}
 
 	return athlete, nil
+}
+
+func Search(t SearchType, q string) ([]Athlete, error) {
+
+	var query string
+	if t == SearchByName {
+		query = `
+    SELECT
+        athletes.slug,
+        athletes.name,
+        athletes.gender,
+        athletes.age,
+        sports.name,
+        athletes.famous_for
+    FROM
+        athletes
+    INNER JOIN
+        sports
+    ON
+        athletes.sport_id = sports.id
+    WHERE
+        athletes.name LIKE '%'||?||'%';`
+	} else if t == SearchBySport {
+		query = `
+    SELECT
+        athletes.slug,
+        athletes.name,
+        athletes.gender,
+        athletes.age,
+        sports.name,
+        athletes.famous_for
+    FROM
+        athletes
+    INNER JOIN
+        sports
+    ON
+        athletes.sport_id = sports.id
+    WHERE
+        sports.name LIKE '%'||?||'%';`
+	} else if t == SearchByFamousFor {
+		query = `
+    SELECT
+        athletes.slug,
+        athletes.name,
+        athletes.gender,
+        athletes.age,
+        sports.name,
+        athletes.famous_for
+    FROM
+        athletes
+    INNER JOIN
+        sports
+    ON
+        athletes.sport_id = sports.id
+    WHERE
+        athletes.famous_for LIKE '%'||?||'%';`
+	}
+
+	rows, err := database.Query(query, q)
+	if err != nil {
+		return nil, err
+	}
+
+	athletes := make([]Athlete, 0)
+	for rows.Next() {
+		athlete := Athlete{}
+
+		err = rows.Scan(
+			&athlete.Slug,
+			&athlete.Name,
+			&athlete.Gender,
+			&athlete.Age,
+			&athlete.Sport,
+			&athlete.FamousFor,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		athletes = append(athletes, athlete)
+	}
+
+	return athletes, nil
 }
