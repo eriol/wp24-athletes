@@ -1,5 +1,5 @@
 
-db := "test.sqlite"
+db := "athletes.sqlite"
 
 # Run wp24-athletes.
 run:

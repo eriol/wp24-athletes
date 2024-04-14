@@ -7,9 +7,10 @@ import (
 	"github.com/eriol/wp24-athletes/database"
 )
 
-func main() {
+const dbPath = "athletes.sqlite"
 
-	err := database.Open("test.sqlite")
+func main() {
+	err := database.Open(dbPath)
 	defer database.Close()
 	if err != nil {
 		log.Fatal(err)
