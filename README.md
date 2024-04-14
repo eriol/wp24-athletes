@@ -7,6 +7,8 @@ course.
 
 ## Endpoints
 
+All the endpoints use the `GET` method.
+
 ### /
 
 Return information about the API.
@@ -26,7 +28,7 @@ Return the alphabetically ordered list of athletes.
 
 For example, `curl -s http://<URL of the athletes API>/athletes | jq`:
 
-```
+```json
 [
   {
     "slug": "arrhichione-di-fliunte",
@@ -65,3 +67,51 @@ For example, `curl -s http://<URL of the athletes API>/athletes | jq`:
 
 ]
 ```
+
+### /athletes/{slug}
+
+Return the specified athlete.
+
+For example, `curl -s http://<URL of the athletes API>/athletes/theodora-di-creta | jq`:
+
+```json
+{
+  "slug": "theodora-di-creta",
+  "name": "Theodora di Creta",
+  "gender": "F",
+  "age": 26,
+  "sport": "Lancio del disco",
+  "famous_for": "Famosa per la sua abilità nel lancio del disco."
+}
+```
+
+### /search
+
+Search for athletes by `name`, `sport` or `famous_for`. You have to pass
+them as query params.
+
+For example, `curl -s http://<URL of the athletes API>/search\?sport\=salto | jq`:
+
+```json
+[
+  {
+    "slug": "thalia-di-mileto",
+    "name": "Thalia di Mileto",
+    "gender": "F",
+    "age": 25,
+    "sport": "Salto in lungo",
+    "famous_for": "Famosa per la sua destrezza nel salto in lungo."
+  }
+]
+```
+
+### /images/{slug}
+
+Return a picture of the athlete.
+
+> [!NOTE]
+> All the pictures where generated locally using Stable Diffusion XL.
+
+For example, `curl -s http://localhost:8080/images/eurydice-di-corinto\?size\=M | feh -` will show:
+
+<img src="images/eurydice-di-corinto.jpg" width="448"/>
