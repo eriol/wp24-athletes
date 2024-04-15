@@ -17,4 +17,6 @@ COPY --from=builder /app/images /images
 COPY --from=builder /app/athletes.sqlite /athletes.sqlite
 RUN apk -U --no-cache upgrade
 
+EXPOSE 8080
+
 ENTRYPOINT ["/wp24-athletes"]
