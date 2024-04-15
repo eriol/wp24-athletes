@@ -98,6 +98,41 @@ func GetAthlete(slug string) (Athlete, error) {
 	return athlete, nil
 }
 
+func GetRandomAthlete() (Athlete, error) {
+
+	query := `
+    SELECT
+        athletes.slug,
+        athletes.name,
+        athletes.gender,
+        athletes.age,
+        sports.name,
+        athletes.famous_for
+    FROM
+        athletes
+    INNER JOIN
+        sports
+    ON
+        athletes.sport_id = sports.id
+    ORDER BY RANDOM()
+    LIMIT 1;`
+
+	athlete := Athlete{}
+
+	if err := database.QueryRow(query).Scan(
+		&athlete.Slug,
+		&athlete.Name,
+		&athlete.Gender,
+		&athlete.Age,
+		&athlete.Sport,
+		&athlete.FamousFor,
+	); err != nil {
+		return athlete, err
+	}
+
+	return athlete, nil
+}
+
 func Search(t SearchType, q string) ([]Athlete, error) {
 
 	var query string

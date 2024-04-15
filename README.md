@@ -115,3 +115,20 @@ Return a picture of the athlete. You can specify `size=M` or `size=S` as query p
 For example, `curl -s http://<URL of the athletes API>/images/eurydice-di-corinto\?size\=M | feh -` will show:
 
 <img src="images/eurydice-di-corinto.jpg" width="448"/>
+
+### /random
+
+Return a random athlete.
+
+For example, `curl -s http://localhost:8080/random | jq`:
+
+```json
+{
+  "slug": "diagora-di-rodi",
+  "name": "Diagora di Rodi",
+  "gender": "M",
+  "age": 32,
+  "sport": "Pugilato",
+  "famous_for": "Celebre per il suo successo nel pugilato."
+}
+```

@@ -14,6 +14,7 @@ func Serve() {
 	router.HandleFunc("GET /athletes/{slug}", getAthlete)
 	router.HandleFunc("GET /search", search)
 	router.HandleFunc("GET /images/{slug}", images)
+	router.HandleFunc("GET /random", random)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

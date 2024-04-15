@@ -47,6 +47,7 @@ func info(w http.ResponseWriter, r *http.Request) {
 	toJSON(w, http.StatusOK, api)
 }
 
+// Return an array with all the athletes.
 func getAthletes(w http.ResponseWriter, r *http.Request) {
 	athletes, err := database.GetAthletes()
 
@@ -59,6 +60,7 @@ func getAthletes(w http.ResponseWriter, r *http.Request) {
 	toJSON(w, http.StatusOK, athletes)
 }
 
+// Return the specified (in the path) athlete.
 func getAthlete(w http.ResponseWriter, r *http.Request) {
 	slug := strings.TrimSpace(r.PathValue("slug"))
 	if slug == "" {
@@ -81,6 +83,7 @@ func getAthlete(w http.ResponseWriter, r *http.Request) {
 	toJSON(w, http.StatusOK, athlete)
 }
 
+// Search for an athlete.
 func search(w http.ResponseWriter, r *http.Request) {
 	queryParams := r.URL.Query()
 
@@ -115,6 +118,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	toJSON(w, http.StatusOK, athletes)
 }
 
+// Return the image of the specified athlete.
 func images(w http.ResponseWriter, r *http.Request) {
 	slug := strings.TrimSpace(r.PathValue("slug"))
 	if slug == "" {
@@ -158,4 +162,16 @@ func images(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "image/jpeg")
 	jpeg.Encode(w, outputImage, &jpeg.Options{Quality: jpeg.DefaultQuality})
+}
+
+// Return a random athlete.
+func random(w http.ResponseWriter, r *http.Request) {
+	athlete, err := database.GetRandomAthlete()
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	toJSON(w, http.StatusOK, athlete)
 }
