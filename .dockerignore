@@ -1,0 +1,7 @@
+.dockerignore
+.git
+.github
+.gitignore
+*.sqlite
+docker-compose.yml
+wp24-athletes
