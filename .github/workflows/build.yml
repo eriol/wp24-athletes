@@ -17,7 +17,7 @@ jobs:
         id: build-images
         uses: redhat-actions/buildah-build@v2
         with:
-          image: yarr
+          image: wp24-athletes
           tags: "latest ${{ github.sha }}"
           archs: amd64, arm64
           containerfiles: |
