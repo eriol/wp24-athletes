@@ -132,3 +132,11 @@ For example, `curl -s http://localhost:8080/random | jq`:
   "famous_for": "Celebre per il suo successo nel pugilato."
 }
 ```
+
+## Deploy using podman
+
+*Suppose you want to use the latest tag.*
+
+```
+podman run -p 8080:8080 quay.io/eriol/wp24-athletes:latest
+```
