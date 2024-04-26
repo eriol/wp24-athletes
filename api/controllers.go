@@ -24,9 +24,17 @@ type ApiError struct {
 	Error string `json:"error"`
 }
 
+func preflight(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Method", "GET, OPTIONS")
+	(*w).Header().Set("Access-Control-Max-Age", "86400")
+}
+
 // Return API description.
 // This endpoint is the root of the API.
 func info(w http.ResponseWriter, r *http.Request) {
+	preflight(&w)
+
 	// The "/" pattern matches everything, so check if we are at the
 	// root and return a 403 otherwise (we blame the client for endpoints that
 	// don't exist!).
@@ -49,6 +57,8 @@ func info(w http.ResponseWriter, r *http.Request) {
 
 // Return an array with all the athletes.
 func getAthletes(w http.ResponseWriter, r *http.Request) {
+	preflight(&w)
+
 	athletes, err := database.GetAthletes()
 
 	if err != nil {
@@ -62,6 +72,8 @@ func getAthletes(w http.ResponseWriter, r *http.Request) {
 
 // Return the specified (in the path) athlete.
 func getAthlete(w http.ResponseWriter, r *http.Request) {
+	preflight(&w)
+
 	slug := strings.TrimSpace(r.PathValue("slug"))
 	if slug == "" {
 		toJSON(w, http.StatusBadRequest, ApiError{Error: "No athlete slug provided"})
@@ -85,6 +97,7 @@ func getAthlete(w http.ResponseWriter, r *http.Request) {
 
 // Search for an athlete.
 func search(w http.ResponseWriter, r *http.Request) {
+	preflight(&w)
 	queryParams := r.URL.Query()
 
 	var searchType database.SearchType
@@ -166,6 +179,8 @@ func images(w http.ResponseWriter, r *http.Request) {
 
 // Return a random athlete.
 func random(w http.ResponseWriter, r *http.Request) {
+	preflight(&w)
+
 	athlete, err := database.GetRandomAthlete()
 
 	if err != nil {
