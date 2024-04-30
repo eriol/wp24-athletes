@@ -26,7 +26,7 @@ type ApiError struct {
 
 func preflight(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Method", "GET, OPTIONS")
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	(*w).Header().Set("Access-Control-Max-Age", "86400")
 }
 
