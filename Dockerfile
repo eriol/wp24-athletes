@@ -11,7 +11,7 @@ RUN sqlite3 athletes.sqlite ".read extras/athletes.sql"
 
 FROM docker.io/alpine:3.19
 
-LABEL LastUpdate="2024-04-26"
+LABEL LastUpdate="2024-04-30"
 COPY --from=builder /app/wp24-athletes /wp24-athletes
 COPY --from=builder /app/images /images
 COPY --from=builder /app/athletes.sqlite /athletes.sqlite
