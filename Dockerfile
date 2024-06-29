@@ -11,12 +11,12 @@ RUN sqlite3 athletes.sqlite ".read extras/athletes.sql"
 
 FROM docker.io/alpine:3.19
 
-LABEL LastUpdate="2024-04-30"
+LABEL LastUpdate="2024-06-30"
 COPY --from=builder /app/wp24-athletes /wp24-athletes
 COPY --from=builder /app/images /images
 COPY --from=builder /app/athletes.sqlite /athletes.sqlite
 RUN apk -U --no-cache upgrade
 
-EXPOSE 8080
+EXPOSE 3000
 
 ENTRYPOINT ["/wp24-athletes"]
