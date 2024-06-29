@@ -16,7 +16,7 @@ func Serve() {
 	router.HandleFunc("GET /images/{slug}", images)
 	router.HandleFunc("GET /random", random)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":3000", router))
 }
 
 func toJSON(w http.ResponseWriter, status int, value any) {
